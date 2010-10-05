@@ -11,13 +11,14 @@
     <mkdir dir="${build}"/>
   </target>
 
-  <target name="compile" depends="init" description="compile the source " >
+  <target name="compile" depends="init" description="compile the source ">
+    <fail unless="jruby.jar" message="Please define -Djruby.jar=/path/to/jruby[-complete].jar "/>
     <javac srcdir="${src}" destdir="${build}">
-      <classpath location="${env.JRUBY_HOME}/lib/jruby.jar"/>
+      <classpath location="${jruby.jar}"/>
     </javac>
   </target>
 
-  <target name="dist" depends="compile" description="generate the distribution" >
+  <target name="dist" depends="clean, compile" description="generate the distribution" >
     <mkdir dir="${dist}"/>
 
     <jar jarfile="${dist}/jruby-prof.jar" basedir="${build}"/>

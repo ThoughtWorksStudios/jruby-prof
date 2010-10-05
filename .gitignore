@@ -2,3 +2,4 @@
 dist
 build
 pkg
+lib/jruby-prof.jar

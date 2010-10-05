@@ -3,8 +3,8 @@ require "rake/gempackagetask"
 require "rake/rdoctask"
 
 spec = Gem::Specification.new do |s|
-  s.name              = "jruby-prof"
-  s.version           = "0.1.0"
+  s.name              = "tw-studios-jruby-prof"
+  s.version           = "0.1.1"
   s.summary           = "A Ruby level profiler for JRuby"
   s.author            = "Daniel Lucraft"
   s.email             = "dan@fluentradical.com"
@@ -32,5 +32,16 @@ end
 
 desc 'Clear out RDoc and generated packages'
 task :clean => [:clobber_rdoc, :clobber_package] do
-  rm "#{spec.name}.gemspec"
+  rm_rf "#{spec.name}.gemspec"
 end
+
+desc "create a jar"
+task :jar do
+  rm_rf 'lib/jruby-prof.jar'
+  raise 'Please define JRUBY_JAR to point to the jruby jar' unless ENV['JRUBY_JAR']
+  sh "ant -Djruby.jar=#{ENV['JRUBY_JAR']}"
+  cp 'dist/jruby-prof.jar', 'lib'
+end
+
+desc "Package a gem"
+task :default => [:clean, :jar, :gem]
