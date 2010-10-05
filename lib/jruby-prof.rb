@@ -4,7 +4,7 @@ require 'erb'
 
 require File.dirname(__FILE__) + "/jruby-prof.jar"
 
-import org.jruby.prof.JRubyProf
+java_import org.jruby.prof.JRubyProf
 
 require 'jruby-prof/abstract_printer'
 require 'jruby-prof/simple_tree_printer'
@@ -16,16 +16,16 @@ require 'jruby-prof/method'
 require 'jruby-prof/tree_html_printer'
 
 require 'jruby-prof/profile_invocation'
-
+require 'jruby'
 class JRubyProf
   
   def self.start
     raise RuntimeError, "JRubyProf already running" if running?
-    start_tracing
+    start_tracing(JRuby.runtime)
   end
   
   def self.stop
-    stop_tracing
+    stop_tracing(JRuby.runtime)
   end
   
   def self.running?
